@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ingenieros Gamer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #ffd700;
+            text-align: center;
+        }
+        button {
+            background-color: #0066ff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0055dd;
+        }
+        .seccion {
+            max-width: 700px;
+            margin: 20px auto;
+            background-color: #252525;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .descripcion {
+            line-height: 1.6;
+            color: #cccccc;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- INICIO -->
+    <div id="inicio" class="seccion">
+        <h1>Ingenieros Gamer</h1>
+        <p style="text-align:center;">Checa si tu PC corre los juegos</p>
+        <div style="text-align:center; margin-top:30px;">
+            <button onclick="mostrar('catalogo')">Ver Catálogo</button>
+        </div>
+    </div>
+
+    <!-- CATÁLOGO -->
+    <div id="catalogo" class="seccion" style="display:none;">
+        <h1>Catálogo de Juegos</h1>
+        
+        <p><strong>GTA V</strong></p>
+        <button onclick="verJuego(0)">Ver detalles</button><br><br>
+        
+        <p><strong>Genshin Impact</strong></p>
+        <button onclick="verJuego(1)">Ver detalles</button><br><br>
+        
+        <p><strong>Hogwarts Legacy</strong></p>
+        <button onclick="verJuego(2)">Ver detalles</button><br><br>
+        
+        <p><strong>Rocket League</strong></p>
+        <button onclick="verJuego(3)">Ver detalles</button><br><br>
+        
+        <p><strong>Resident Evil Requiem</strong></p>
+        <button onclick="verJuego(4)">Ver detalles</button><br><br>
+        
+        <button onclick="mostrar('inicio')">Volver</button>
+    </div>
+
+    <!-- DETALLE DEL JUEGO -->
+    <div id="juego" class="seccion" style="display:none;">
+        <h1 id="tituloJuego"></h1>
+        <p><strong>Género:</strong> <span id="generoJuego"></span></p>
+        
+        <p class="descripcion" id="descripcionJuego"></p>
+        
+        <h2>Mínimos</h2>
+        <div id="minimos"></div>
+        
+        <h2>Recomendados</h2>
+        <div id="recomendados"></div>
+        
+        <br>
+        <button onclick="mostrar('comparador')">Comprobar mi PC</button>
+        <br><br>
+        <button onclick="mostrar('catalogo')">Volver al catálogo</button>
+    </div>
+
+    <!-- COMPARADOR -->
+    <div id="comparador" class="seccion" style="display:none;">
+        <h1>Comprobar mi PC</h1>
+        
+        <label>RAM (GB):</label><br>
+        <input type="number" id="ram" placeholder="Ej: 16"><br><br>
+        
+        <label>Almacenamiento disponible (GB):</label><br>
+        <input type="number" id="almacenamiento" placeholder="Ej: 200"><br><br>
+        
+        <button onclick="comprobar()">Comprobar</button>
+        <br><br>
+        <button onclick="mostrar('inicio')">Volver al inicio</button>
+    </div>
+
+    <!-- RESULTADO -->
+    <div id="resultado" class="seccion" style="display:none;">
+        <h1>Resultado</h1>
+        <p id="textoResultado" style="font-size:22px;"></p>
+        <br>
+        <button onclick="mostrar('inicio')">Volver al inicio</button>
+    </div>
+
+    <script>
+        let juegoActual = 0;
+
+        const juegos = [
+            {
+                nombre: "Grand Theft Auto V",
+                genero: "Acción, Aventura, Mundo Abierto",
+                descripcion: "Un joven estafador callejero, un ladrón de bancos retirado y un psicópata aterrador se ven enredados con algunos de los elementos más aterradores y desquiciados del submundo criminal...",
+                minimos: "• SO: Windows 10<br>• Procesador: Intel Core i7-4770 o AMD FX-9590<br>• RAM: 8 GB<br>• Almacenamiento: 105 GB SSD<br>• Gráficos: GTX 1630 / RX 6400",
+                recomendados: "• SO: Windows 11<br>• Procesador: Intel i5-9600K o Ryzen 5 3600<br>• RAM: 16 GB<br>• Gráficos: RTX 3060 / RX 6600 XT"
+            },
+            {
+                nombre: "Genshin Impact",
+                genero: "Aventura, Mundo Abierto, RPG",
+                descripcion: "Emprende un viaje a través de Teyvat para encontrar a tu hermano perdido y buscar respuestas de Los Siete...",
+                minimos: "• SO: Windows 10 64bit<br>• Procesador: Intel i5 6ta gen o equivalente<br>• RAM: 8 GB<br>• Gráficos: GTX 1050<br>• Almacenamiento: 150 GB",
+                recomendados: "• SO: Windows 10/11<br>• Procesador: Intel i7 7ma gen o Ryzen 5000<br>• RAM: 16 GB<br>• Gráficos: GTX 1060 6GB"
+            },
+            {
+                nombre: "Hogwarts Legacy",
+                genero: "Acción Aventura RPG",
+                descripcion: "Disfruta de Hogwarts en el siglo XIX. Tu personaje es un estudiante que tiene la clave de un antiguo secreto que amenaza con destruir el mundo mágico.",
+                minimos: "• SO: Windows 10<br>• Procesador: Intel i5-8400 / Ryzen 5 2600<br>• RAM: 16 GB<br>• Almacenamiento: 85 GB<br>• Gráficos: GTX 1080 Ti / RX 5700 XT",
+                recomendados: "• Procesador: Intel i7-8700 / Ryzen 5 3600<br>• RAM: 16 GB<br>• Gráficos: GTX 1070 / RX Vega 56"
+            },
+            {
+                nombre: "Rocket League",
+                genero: "Carreras, Deportes",
+                descripcion: "Híbrido de fútbol y coches. Personaliza tu auto y compite en uno de los juegos más divertidos.",
+                minimos: "• SO: Windows 7 64bit<br>• Procesador: 2.5 GHz Dual Core<br>• RAM: 4 GB<br>• Almacenamiento: 20 GB<br>• Gráficos: GTX 760 / R7 270X",
+                recomendados: "• Procesador: 3.0 GHz Quad Core<br>• RAM: 8 GB<br>• Gráficos: GTX 1060 / RX 470"
+            },
+            {
+                nombre: "Resident Evil Requiem",
+                genero: "Acción, Aventura, Terror",
+                descripcion: "Réquiem para los muertos. Pesadilla para los vivos. Prepárate para escapar de la muerte.",
+                minimos: "• SO: Windows 11<br>• Procesador: Intel i5-8500 / Ryzen 5 3500<br>• RAM: 16 GB<br>• Gráficos: GTX 1660 / RX 5500 XT<br>• Almacenamiento: SSD requerido",
+                recomendados: "• Procesador: Intel i7-8700 / Ryzen 5 5500<br>• RAM: 16 GB<br>• Gráficos: RTX 2060 / RX 6600<br>• Almacenamiento: SSD"
+            }
+        ];
+
+        function mostrar(id) {
+            document.querySelectorAll('.seccion').forEach(seccion => {
+                seccion.style.display = 'none';
+            });
+            document.getElementById(id).style.display = 'block';
+        }
+
+        function verJuego(index) {
+            juegoActual = index;
+            const juego = juegos[index];
+            
+            document.getElementById("tituloJuego").textContent = juego.nombre;
+            document.getElementById("generoJuego").textContent = juego.genero;
+            document.getElementById("descripcionJuego").textContent = juego.descripcion;
+            document.getElementById("minimos").innerHTML = juego.minimos;
+            document.getElementById("recomendados").innerHTML = juego.recomendados;
+            
+            mostrar("juego");
+        }
+
+        function comprobar() {
+            let ram = parseInt(document.getElementById("ram").value) || 0;
+            let alm = parseInt(document.getElementById("almacenamiento").value) || 0;
+            let juego = juegos[juegoActual];
+            
+            let texto = "";
+            
+            if (ram >= 16 && alm >= 100) {
+                texto = "✅ Corre muy bien (Recomendado)";
+            } else if (ram >= juego.minimos.includes("8 GB") ? 8 : 12 && alm >= 80) {
+                texto = "✅ Sí corre el juego";
+            } else if (ram >= 8) {
+                texto = "⚠️ Puede correr en bajo";
+            } else {
+                texto = "❌ No corre bien";
+            }
+            
+            document.getElementById("textoResultado").innerHTML = texto;
+            mostrar("resultado");
+        }
+    </script>
+</body>
+</html>
